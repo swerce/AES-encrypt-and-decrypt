@@ -2,7 +2,7 @@
 
 This is a simple web-based tool that allows you to encrypt and decrypt text using the AES (Advanced Encryption Standard) algorithm. AES is a widely used and secure encryption method. This tool adds an extra layer of security by performing AES encryption and Base64 encoding.
 
-![Tool Preview](https://github.com/swerce/AES-encrypt-and-decrypt/blob/main/Screenshot%202023-08-24%20234908.png)
+![Tool Preview](https://github.com/swerce/AES-encrypt-and-decrypt/raw/main/Screenshot%202023-08-24%20234908.png)
 
 ## Table of Contents
 
