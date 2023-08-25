@@ -16,7 +16,7 @@ This is a simple web-based tool that allows you to encrypt and decrypt text usin
 To use the Text Encryption/Decryption Tool, simply open the provided HTML file in your web browser. Here's how:
 
 1. Clone or download this repository to your local machine.
-2. Open the `index.html` file in your web browser.
+2. Open the `encrypt.html` file in your web browser.
 
 ## How It Works
 
