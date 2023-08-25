@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+    <style>
+
+.subtitle{
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.subtitle ol li{
+    list-style: inside;
+    font-weight: 600;
+    color: #151515;
+}
+
+      /* Hover animation for icons */
+      .button:hover .icon {
+        transition: transform 0.3s ;
+        transform: scale(1.1); /* Scale up by 20% */
+      }
+      .button .icon:first-child:last-child {
+        margin-left: calc(-0.5em - 1px);
+        margin-right: calc(0.5em - 1px);
+        display: flex;
+      }
+      /* Markdown-style instructions */
+      .markdown {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        border: 1px solid #ddd;
+        padding: 1.5rem;
+        border-radius: 5px;
+        background-color: #f5f5f5;
+      }
+
+      .markdown h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .markdown ol {
+        list-style: decimal;
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+      }
+
+      .markdown li {
+        margin-bottom: 0.5rem;
+      }
+
+      .markdown p:last-child {
+        margin-bottom: 0;
+      }
+    </style>
+    <title>Text Encryption/Decryption Tool</title>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Text Encryption/Decryption Tool</h1>
+        <div class="field">
+          <label class="label">Enter your text:</label>
+          <div class="control">
+            <textarea
+              id="inputText"
+              class="textarea"
+              placeholder="Enter your text..."
+            ></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Encryption Key:</label>
+          <div class="control">
+            <input
+              type="text"
+              id="keyword"
+              class="input"
+              placeholder="Enter encryption key..."
+            />
+          </div>
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <button id="encodeBtn" class="button is-primary">
+              <i class="fas fa-lock icon"></i> Encrypt
+            </button>
+          </div>
+          <div class="control">
+            <button id="decodeBtn" class="button is-info">
+              <i class="fas fa-unlock icon"></i> Decrypt
+            </button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Result:</label>
+          <div class="control">
+            <textarea
+              id="outputText"
+              class="textarea"
+              placeholder="Result..."
+              readonly
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <h2 class="subtitle">How It Works</h2>
+        <p>
+          This tool uses the AES (Advanced Encryption Standard) algorithm for
+          both encryption and decryption. AES is a widely used and secure
+          encryption method. To encrypt your text, enter the text you want to
+          protect and a secure encryption key. Click the "Encrypt" button, and
+          the tool will perform AES encryption along with an additional layer of
+          Base64 encoding to produce the encrypted result.
+        </p>
+        <p>
+          To decrypt an encrypted text, provide the encrypted text along with
+          the same encryption key used for encryption. Click the "Decrypt"
+          button, and the tool will reverse the encryption process to recover
+          the original text.
+        </p>
+        <p>
+          Please remember that encryption is a complex topic, and the strength
+          of the encryption lies in the secrecy of the encryption key. Make sure
+          to keep your encryption key secure.
+        </p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <h2 class="subtitle">How to Use</h2>
+        <ol>
+          <li>
+            Enter the text you want to encrypt in the "Enter your text" field.
+          </li>
+          <li>
+            Enter a strong encryption key in the "Encryption Key" field. This
+            key will be used to encrypt and decrypt your text. Keep this key
+            secure.
+          </li>
+          <li>
+            Click the "Encrypt" button to encrypt the text using the provided
+            key. The encrypted result will be displayed in the "Result"
+            textarea.
+          </li>
+          <li>
+            To decrypt the encrypted text, enter the encrypted text in the
+            "Result" textarea and provide the same encryption key used for
+            encryption.
+          </li>
+          <li>Click the "Decrypt" button to reveal the original text.</li>
+        </ol>
+        <p>
+          Remember that both encryption and decryption require the correct
+          encryption key. Losing the key may result in irreversible data loss.
+        </p>
+      </div>
+    </section>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const inputText = document.getElementById("inputText");
+        const outputText = document.getElementById("outputText");
+        const encodeBtn = document.getElementById("encodeBtn");
+        const decodeBtn = document.getElementById("decodeBtn");
+        const keywordInput = document.getElementById("keyword");
+
+        function encryptAES(text, keyword) {
+          const encrypted = CryptoJS.AES.encrypt(text, keyword).toString();
+          const encodedEncrypted = btoa(encrypted); // Additional Base64 encoding
+          return encodedEncrypted;
+        }
+
+        function decryptAES(encodedEncryptedText, keyword) {
+          const encryptedText = atob(encodedEncryptedText); // Decode Base64
+          const decrypted = CryptoJS.AES.decrypt(
+            encryptedText,
+            keyword
+          ).toString(CryptoJS.enc.Utf8);
+          return decrypted;
+        }
+
+        encodeBtn.addEventListener("click", () => {
+          const keyword = keywordInput.value;
+          const text = inputText.value;
+          const encodedText = encryptAES(text, keyword);
+          outputText.value = encodedText;
+        });
+
+        decodeBtn.addEventListener("click", () => {
+          const keyword = keywordInput.value;
+          const encodedEncryptedText = inputText.value;
+          const decryptedText = decryptAES(encodedEncryptedText, keyword);
+          outputText.value = decryptedText;
+        });
+      });
+    </script>
+  </body>
+</html>
